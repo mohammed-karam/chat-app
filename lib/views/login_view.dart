@@ -1,7 +1,6 @@
+import 'package:chat_app/blocs/bloc/auth_bloc.dart';
 import 'package:chat_app/components/custom_button.dart';
 import 'package:chat_app/components/custom_text_field.dart';
-import 'package:chat_app/cubit/login_cubit/login_cubit.dart';
-import 'package:chat_app/cubit/login_cubit/login_states.dart';
 import 'package:chat_app/helpers/show_snack_bar.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/views/chat_view.dart';
@@ -21,7 +20,7 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginStates>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         // Handle state changes here
         if (state is LoadingLoginState) {
@@ -94,9 +93,9 @@ class LoginView extends StatelessWidget {
                         if (formKey.currentState!.validate()) {
                           // Just trigger the login - the listener will handle the response
                           try {
-                            BlocProvider.of<LoginCubit>(
+                            BlocProvider.of<AuthBloc>(
                               context,
-                            ).loginUser(email: email!, password: password!);
+                            ).add(LoginEvent(email: email!, password: password!));
                           } catch (e) {}
                         } else {
                           showSnackBar(
